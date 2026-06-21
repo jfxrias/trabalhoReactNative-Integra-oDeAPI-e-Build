@@ -4,23 +4,25 @@ import styles from "./styles";
 import api from "../../data/api";
 import { AuthContext } from "../../presentation/context/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useTranslation } from "react-i18next"; 
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const { login: authLogin } = useContext(AuthContext);
+  const { t } = useTranslation(); 
 
   const validateInputs = () => {
     if (!email.trim()) {
-      Alert.alert("Erro", "O campo de e-mail é obrigatório.");
+      Alert.alert(t("error"), t("emailRequired"));
       return false;
     }
     if (!email.includes("@")) {
-      Alert.alert("Erro", "Digite um e-mail válido (precisa conter @).");
+      Alert.alert(t("error"), t("invalidEmail"));
       return false;
     }
     if (!senha.trim()) {
-      Alert.alert("Erro", "A senha é obrigatória.");
+      Alert.alert(t("error"), t("passwordRequired"));
       return false;
     }
     return true;
@@ -30,16 +32,15 @@ export default function LoginScreen() {
     if (!validateInputs()) return;
 
     try {
-     const resp = await api.post("/usuarios/login", { login: email, senha });
+      const resp = await api.post("/usuarios/login", { login: email, senha });
 
-console.log("Resposta do backend:", resp.data);
-
+      console.log("Resposta do backend:", resp.data);
 
       const token = resp.data.token;
       const idUsuario = resp.data.idUsuario;
 
       if (!token || !idUsuario) {
-        Alert.alert("Erro", "Token ou ID não retornados pelo servidor.");
+        Alert.alert(t("error"), t("missingTokenOrId"));
         return;
       }
 
@@ -49,19 +50,19 @@ console.log("Resposta do backend:", resp.data);
       await authLogin(token, String(idUsuario), resp.data);
     } catch (err: any) {
       Alert.alert(
-        "Erro",
-        err.response?.data?.message || "Não foi possível realizar o login.",
+        t("error"),
+        err.response?.data?.message || t("loginFailed")
       );
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.appTitle}>📝Anotaí</Text>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.appTitle}>📝 Anotaí</Text>
+      <Text style={styles.title}>{t("login")}</Text>
       <TextInput
         style={styles.input}
-        placeholder="E-mail"
+        placeholder={t("email")}
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -69,12 +70,12 @@ console.log("Resposta do backend:", resp.data);
       />
       <TextInput
         style={styles.input}
-        placeholder="Senha"
+        placeholder={t("senha")}
         secureTextEntry
         value={senha}
         onChangeText={setSenha}
       />
-      <Button title="Entrar" onPress={handleLogin} />
+      <Button title={t("login")} onPress={handleLogin} />
     </View>
   );
 }

@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { View, Text, TextInput, Button, FlatList, Alert } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { NotesContext } from "../../presentation/context/NotesContext";
+import { useTranslation } from "react-i18next"; // import para tradução
 import styles from "./styles";
 
 export default function MinhasNotasScreen() {
@@ -9,13 +10,14 @@ export default function MinhasNotasScreen() {
   const [newNote, setNewNote] = useState("");
   const [selectedColor, setSelectedColor] = useState("#ffff88");
 
-  // estados para edição
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState("");
 
+  const { t } = useTranslation(); 
+
   const handleSaveEdit = () => {
     if (!editingText.trim()) {
-      Alert.alert("Erro", "O texto não pode estar vazio.");
+      Alert.alert(t("error"), t("emptyTextAlert"));
       return;
     }
     if (editingId) {
@@ -31,38 +33,38 @@ export default function MinhasNotasScreen() {
       keyExtractor={(item) => item.idBloco}
       ListHeaderComponent={
         <View>
-          <Text style={styles.title}>Minhas Notas</Text>
+          <Text style={styles.title}>{t("myNotes")}</Text>
 
           <TextInput
-            placeholder="Digite uma nota"
+            placeholder={t("addNote")}
             value={newNote}
             onChangeText={setNewNote}
             style={styles.input}
           />
 
-          <Text style={styles.label}>Escolha a cor:</Text>
+          <Text style={styles.label}>{t("chooseColor")}</Text>
           <Picker
             selectedValue={selectedColor}
             style={styles.input}
             onValueChange={(value) => setSelectedColor(value)}
           >
-         <Picker.Item label="Amarelo" value="#ffff88" />
-            <Picker.Item label="Verde" value="#88ff88" />
-            <Picker.Item label="Azul" value="#88ffff" />
-            <Picker.Item label="Rosa" value="#ff88ff" />
-            <Picker.Item label="Vermelho" value="#ff4444" />
-            <Picker.Item label="Laranja" value="#ff8844" />
-            <Picker.Item label="Roxo" value="#8844ff" />
-            <Picker.Item label="Cinza" value="#cccccc" />
-            <Picker.Item label="Preto" value="#000000" />
-            <Picker.Item label="Branco" value="#ffffff" />
+            <Picker.Item label={t("yellow")} value="#ffff88" />
+            <Picker.Item label={t("green")} value="#88ff88" />
+            <Picker.Item label={t("blue")} value="#88ffff" />
+            <Picker.Item label={t("pink")} value="#ff88ff" />
+            <Picker.Item label={t("red")} value="#ff4444" />
+            <Picker.Item label={t("orange")} value="#ff8844" />
+            <Picker.Item label={t("purple")} value="#8844ff" />
+            <Picker.Item label={t("gray")} value="#cccccc" />
+            <Picker.Item label={t("black")} value="#000000" />
+            <Picker.Item label={t("white")} value="#ffffff" />
           </Picker>
 
           <Button
-            title="Adicionar"
+            title={t("addNote")}
             onPress={() => {
               if (!newNote.trim()) {
-                Alert.alert("Erro", "O texto não pode estar vazio.");
+                Alert.alert(t("error"), t("emptyTextAlert"));
                 return;
               }
               addNote({ texto: newNote, cor: selectedColor });
@@ -73,13 +75,13 @@ export default function MinhasNotasScreen() {
           {editingId && (
             <View style={{ marginVertical: 20 }}>
               <TextInput
-                placeholder="Editar nota"
+                placeholder={t("edit")}
                 value={editingText}
                 onChangeText={setEditingText}
                 style={styles.input}
               />
-              <Button title="Salvar edição" onPress={handleSaveEdit} />
-              <Button title="Cancelar" color="gray" onPress={() => setEditingId(null)} />
+              <Button title={t("save")} onPress={handleSaveEdit} />
+              <Button title={t("cancel")} color="gray" onPress={() => setEditingId(null)} />
             </View>
           )}
         </View>
@@ -88,7 +90,7 @@ export default function MinhasNotasScreen() {
         <View style={[styles.noteCard, { backgroundColor: item.cor || "#fff" }]}>
           <Text style={styles.noteText}>{item.texto}</Text>
           <Button
-            title="Editar"
+            title={t("edit")}
             onPress={() => {
               setEditingId(item.idBloco);
               setEditingText(item.texto);
@@ -96,7 +98,7 @@ export default function MinhasNotasScreen() {
             }}
           />
           <Button
-            title="Excluir"
+            title={t("delete")}
             color="red"
             onPress={() => deleteNote(item.idBloco)}
           />

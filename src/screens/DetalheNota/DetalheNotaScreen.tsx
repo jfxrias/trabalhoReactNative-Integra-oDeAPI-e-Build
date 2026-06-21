@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
 import { View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { NotesContext } from '../../presentation/context/NotesContext';
-import { ThemeContext } from '../..//presentation/context/ThemeContext';
+import { ThemeContext } from '../../presentation/context/ThemeContext';
 import { useFont } from '../../presentation/context/FontContext';
+import { useTranslation } from 'react-i18next'; 
 import styles from './styles';
 
 export default function DetalheNota({ route, navigation }) {
@@ -10,6 +11,7 @@ export default function DetalheNota({ route, navigation }) {
   const { notes } = useContext(NotesContext);
   const { darkMode } = useContext(ThemeContext);
   const { fontSize, fontFamily } = useFont();
+  const { t } = useTranslation(); // hook para pegar textos traduzidos
 
   const theme = {
     bg: darkMode ? '#1a1a2e' : '#f8f8f8',
@@ -21,9 +23,9 @@ export default function DetalheNota({ route, navigation }) {
   if (!note) {
     return (
       <View style={[styles.container, { backgroundColor: theme.bg }]}>
-        <Text style={{ color: theme.text }}>Nota não encontrada</Text>
+        <Text style={{ color: theme.text }}>{t("noteNotFound")}</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.backBtn}>
-          <Text style={styles.backBtnText}>← Voltar para Home</Text>
+          <Text style={styles.backBtnText}>← {t("backToHome")}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -32,33 +34,33 @@ export default function DetalheNota({ route, navigation }) {
   const { texto, cor = '#FFD966', categoria, createdAt } = note;
 
   function copyToClipboard(text: string) {
-    Alert.alert('Copiado', 'Conteúdo copiado para a área de transferência!');
+    Alert.alert(t("copied"), t("copiedToClipboard"));
   }
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: theme.bg }]}>
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-        <Text style={styles.backBtnText}>← Voltar</Text>
+        <Text style={styles.backBtnText}>← {t("back")}</Text>
       </TouchableOpacity>
 
       <View style={[styles.noteCard, { backgroundColor: cor }]}>
         {categoria && <Text style={styles.noteCategory}>{categoria}</Text>}
-        <Text style={styles.noteTitle}>{texto || '(sem título)'}</Text>
-        {createdAt && <Text style={styles.noteDate}>Adicionado em: {createdAt}</Text>}
+        <Text style={styles.noteTitle}>{texto || t("noTitle")}</Text>
+        {createdAt && <Text style={styles.noteDate}>{t("addedOn")}: {createdAt}</Text>}
         <Text style={[styles.noteContent, { fontSize, fontFamily }]}>
-          {texto || 'Sem conteúdo.'}
+          {texto || t("noContent")}
         </Text>
       </View>
 
       <View style={styles.actions}>
         <TouchableOpacity onPress={() => copyToClipboard(note.texto)} style={styles.shareBtn}>
-          <Text style={styles.shareBtnText}>Copiar</Text>
+          <Text style={styles.shareBtnText}>{t("copy")}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.shareBtn}>
-          <Text style={styles.shareBtnText}>Exportar PDF</Text>
+          <Text style={styles.shareBtnText}>{t("exportPdf")}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.shareBtn}>
-          <Text style={styles.shareBtnText}>Enviar Email</Text>
+          <Text style={styles.shareBtnText}>{t("sendEmail")}</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
