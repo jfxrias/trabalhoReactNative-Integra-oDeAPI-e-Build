@@ -3,18 +3,19 @@ import { View, Text, TextInput, Button, Alert } from "react-native";
 import styles from "./styles";
 import api from "../../data/api";
 import { AuthContext } from "../../presentation/context/AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function LoginScreen({ navigation }) {
-  const [login, setLogin] = useState("");
+export default function LoginScreen() {
+  const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const { login: authLogin } = useContext(AuthContext);
 
   const validateInputs = () => {
-    if (!login.trim()) {
+    if (!email.trim()) {
       Alert.alert("Erro", "O campo de e-mail é obrigatório.");
       return false;
     }
-    if (!login.includes("@")) {
+    if (!email.includes("@")) {
       Alert.alert("Erro", "Digite um e-mail válido (precisa conter @).");
       return false;
     }
@@ -29,24 +30,40 @@ export default function LoginScreen({ navigation }) {
     if (!validateInputs()) return;
 
     try {
-      const resp = await api.post("/usuarios/login", { login, senha });
-      await authLogin(resp.data.token);
-      navigation.replace("Home");
-    } catch (err) {
-      console.log("Erro ao logar", err);
-      Alert.alert("Erro", "Não foi possível realizar o login.");
+     const resp = await api.post("/usuarios/login", { login: email, senha });
+
+console.log("Resposta do backend:", resp.data);
+
+
+      const token = resp.data.token;
+      const idUsuario = resp.data.idUsuario;
+
+      if (!token || !idUsuario) {
+        Alert.alert("Erro", "Token ou ID não retornados pelo servidor.");
+        return;
+      }
+
+      await AsyncStorage.setItem("token", token);
+      await AsyncStorage.setItem("userId", String(idUsuario));
+
+      await authLogin(token, String(idUsuario), resp.data);
+    } catch (err: any) {
+      Alert.alert(
+        "Erro",
+        err.response?.data?.message || "Não foi possível realizar o login.",
+      );
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.appTitle}>📝 Meu Bloco de Notas</Text>
+      <Text style={styles.appTitle}>📝Anotaí</Text>
       <Text style={styles.title}>Login</Text>
       <TextInput
         style={styles.input}
         placeholder="E-mail"
-        value={login}
-        onChangeText={setLogin}
+        value={email}
+        onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
       />

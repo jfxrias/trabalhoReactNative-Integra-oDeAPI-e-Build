@@ -47,9 +47,13 @@ public class UsuarioService {
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(dto.getLogin(), dto.getSenha())
             );
+
             Usuario usuario = usuarioRepository.findByLogin(dto.getLogin())
-                    .orElseThrow();
-            String token = jwtUtil.gerarToken(dto.getLogin());
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+            String token = jwtUtil.gerarToken(usuario.getLogin());
+
+       
             return new LoginResponseDTO(token, usuario.getIdUsuario(), usuario.getLogin());
         } catch (Exception e) {
             throw new BadCredentialsException("Login ou senha inválidos");
@@ -57,30 +61,31 @@ public class UsuarioService {
     }
 
     public Usuario alterarSenha(Long id, String novaSenha) {
-        Usuario u = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        Usuario u = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         u.setSenhaUsuario(passwordEncoder.encode(novaSenha));
         return usuarioRepository.save(u);
     }
 
-public UsuarioResponseDTO atualizarPerfil(Long id, String login) {
-    Usuario u = usuarioRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    public UsuarioResponseDTO atualizarPerfil(Long id, String login) {
+        Usuario u = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-    if (login != null && !login.isBlank()) {
-        if (!login.equals(u.getLogin()) && usuarioRepository.existsByLogin(login)) {
-            throw new RuntimeException("Login já cadastrado: " + login);
+        if (login != null && !login.isBlank()) {
+            if (!login.equals(u.getLogin()) && usuarioRepository.existsByLogin(login)) {
+                throw new RuntimeException("Login já cadastrado: " + login);
+            }
+            u.setLogin(login);
         }
-        u.setLogin(login);
+
+        Usuario salvo = usuarioRepository.save(u);
+        String novoToken = jwtUtil.gerarToken(salvo.getLogin());
+        return new UsuarioResponseDTO(salvo.getIdUsuario(), salvo.getLogin(), novoToken);
     }
 
-    Usuario salvo = usuarioRepository.save(u);
-    String novoToken = jwtUtil.gerarToken(salvo.getLogin());
-    return new UsuarioResponseDTO(salvo.getIdUsuario(), salvo.getLogin(), novoToken);
-}
-
-
     public Usuario mudarIdioma(Long id, String idioma) {
-        Usuario u = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        Usuario u = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         u.setIdioma(idioma);
         return usuarioRepository.save(u);
     }

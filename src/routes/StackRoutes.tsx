@@ -1,17 +1,21 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeScreen from "../screens/Home/HomeScreen";
-import LoginScreen from "../screens/Login/LoginScreen";
+import TabRoutes from "./TabRoutes";
+import DetalheNotaScreen from "../screens/DetalheNota/DetalheNotaScreen";
 
 const Stack = createNativeStackNavigator();
 
 export default function StackRoutes() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Home" component={HomeScreen} />
-     
-    
+      
+      <Stack.Screen
+        name="Main"
+        component={TabRoutes}
+        options={{ headerShown: false }}
+      />
+ 
+      <Stack.Screen name="DetalheNota" component={DetalheNotaScreen} />
     </Stack.Navigator>
   );
 }
