@@ -123,7 +123,7 @@ const resources = {
 
       email: "Email",
       senha: "Password",
-      entrar: "Login",
+      entrar: "Enter",
       error: "Error",
       emailRequired: "Email is required.",
       invalidEmail: "Enter a valid email (must contain @).",

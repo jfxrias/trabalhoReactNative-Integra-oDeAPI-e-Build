@@ -75,7 +75,7 @@ export default function LoginScreen() {
         value={senha}
         onChangeText={setSenha}
       />
-      <Button title={t("login")} onPress={handleLogin} />
+      <Button title={t("entrar")} onPress={handleLogin} />
     </View>
   );
 }
