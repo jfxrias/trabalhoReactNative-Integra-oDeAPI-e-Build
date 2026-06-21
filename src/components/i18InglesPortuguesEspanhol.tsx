@@ -1,7 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-
 const resources = {
   pt: {
     translation: {
@@ -27,6 +26,7 @@ const resources = {
       logout: "Sair",
 
       homeTitle: "Minhas Notas",
+      searchNote: "Buscar nota...",
       notesCountSingular: "nota",
       notesCountPlural: "notas",
       noNotesFound: "Nenhuma nota encontrada",
@@ -41,7 +41,43 @@ const resources = {
       cancel: "Cancelar",
       delete: "Excluir",
       edit: "Editar",
-      emptyTextAlert: "O campo de texto não pode estar vazio!"
+      emptyTextAlert: "O campo de texto não pode estar vazio!",
+
+      email: "E-mail",
+      senha: "Senha",
+      entrar: "Entrar",
+      error: "Erro",
+      emailRequired: "O campo de e-mail é obrigatório.",
+      invalidEmail: "Digite um e-mail válido (precisa conter @).",
+      passwordRequired: "A senha é obrigatória.",
+      missingTokenOrId: "Token ou ID não retornados pelo servidor.",
+      loginFailed: "Não foi possível realizar o login.",
+
+     
+      noteNotFound: "Nota não encontrada",
+      backToHome: "Voltar para Home",
+      back: "Voltar",
+      copied: "Copiado",
+      copiedToClipboard: "Conteúdo copiado para a área de transferência!",
+      noTitle: "(sem título)",
+      addedOn: "Adicionado em",
+      noContent: "Sem conteúdo.",
+      copy: "Copiar",
+      exportPdf: "Exportar PDF",
+      sendEmail: "Enviar Email",
+
+     
+      chooseColor: "Escolha a cor:",
+      yellow: "Amarelo",
+      green: "Verde",
+      blue: "Azul",
+      pink: "Rosa",
+      red: "Vermelho",
+      orange: "Laranja",
+      purple: "Roxo",
+      gray: "Cinza",
+      black: "Preto",
+      white: "Branco"
     }
   },
   en: {
@@ -68,6 +104,7 @@ const resources = {
       logout: "Logout",
 
       homeTitle: "My Notes",
+      searchNote: "Search note...",
       notesCountSingular: "note",
       notesCountPlural: "notes",
       noNotesFound: "No notes found",
@@ -82,7 +119,43 @@ const resources = {
       cancel: "Cancel",
       delete: "Delete",
       edit: "Edit",
-      emptyTextAlert: "Text field cannot be empty!"
+      emptyTextAlert: "Text field cannot be empty!",
+
+      email: "Email",
+      senha: "Password",
+      entrar: "Login",
+      error: "Error",
+      emailRequired: "Email is required.",
+      invalidEmail: "Enter a valid email (must contain @).",
+      passwordRequired: "Password is required.",
+      missingTokenOrId: "Token or ID not returned by server.",
+      loginFailed: "Login failed.",
+
+     
+      noteNotFound: "Note not found",
+      backToHome: "Back to Home",
+      back: "Back",
+      copied: "Copied",
+      copiedToClipboard: "Content copied to clipboard!",
+      noTitle: "(no title)",
+      addedOn: "Added on",
+      noContent: "No content.",
+      copy: "Copy",
+      exportPdf: "Export PDF",
+      sendEmail: "Send Email",
+
+     
+      chooseColor: "Choose a color:",
+      yellow: "Yellow",
+      green: "Green",
+      blue: "Blue",
+      pink: "Pink",
+      red: "Red",
+      orange: "Orange",
+      purple: "Purple",
+      gray: "Gray",
+      black: "Black",
+      white: "White"
     }
   },
   es: {
@@ -109,6 +182,7 @@ const resources = {
       logout: "Salir",
 
       homeTitle: "Mis Notas",
+      searchNote: "Buscar nota...",
       notesCountSingular: "nota",
       notesCountPlural: "notas",
       noNotesFound: "No se encontraron notas",
@@ -123,14 +197,50 @@ const resources = {
       cancel: "Cancelar",
       delete: "Eliminar",
       edit: "Editar",
-      emptyTextAlert: "¡El campo de texto no puede estar vacío!"
+      emptyTextAlert: "¡El campo de texto no puede estar vacío!",
+
+      email: "Correo electrónico",
+      senha: "Contraseña",
+      entrar: "Iniciar sesión",
+      error: "Error",
+      emailRequired: "El campo de correo electrónico es obligatorio.",
+      invalidEmail: "Ingrese un correo válido (debe contener @).",
+      passwordRequired: "La contraseña es obligatoria.",
+      missingTokenOrId: "Token o ID no devueltos por el servidor.",
+      loginFailed: "No se pudo iniciar sesión.",
+
+     
+      noteNotFound: "Nota no encontrada",
+      backToHome: "Volver al inicio",
+      back: "Volver",
+      copied: "Copiado",
+      copiedToClipboard: "¡Contenido copiado al portapapeles!",
+      noTitle: "(sin título)",
+      addedOn: "Agregado en",
+      noContent: "Sin contenido.",
+      copy: "Copiar",
+      exportPdf: "Exportar PDF",
+      sendEmail: "Enviar correo",
+
+     
+      chooseColor: "Elige un color:",
+      yellow: "Amarillo",
+      green: "Verde",
+      blue: "Azul",
+      pink: "Rosa",
+      red: "Rojo",
+      orange: "Naranja",
+      purple: "Morado",
+      gray: "Gris",
+      black: "Negro",
+      white: "Blanco"
     }
   }
 };
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: "pt",
+  lng: "pt", 
   fallbackLng: "en",
   interpolation: { escapeValue: false }
 });
