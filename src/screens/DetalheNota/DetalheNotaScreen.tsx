@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
-import { View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, ScrollView, Share } from 'react-native';
 import { NotesContext } from '../../presentation/context/NotesContext';
 import { ThemeContext } from '../../presentation/context/ThemeContext';
 import { useFont } from '../../presentation/context/FontContext';
 import { useTranslation } from 'react-i18next'; 
 import styles from './styles';
+import * as Clipboard from 'expo-clipboard';
 
 export default function DetalheNota({ route, navigation }) {
   const { id } = route.params;
@@ -33,8 +34,18 @@ export default function DetalheNota({ route, navigation }) {
 
   const { texto, cor = '#FFD966', categoria, createdAt } = note;
 
-  function copyToClipboard(text: string) {
+
+  async function copyToClipboard(text: string) {
+    await Clipboard.setStringAsync(text);
     Alert.alert(t("copied"), t("copiedToClipboard"));
+  }
+
+  async function shareNote(text: string) {
+    try {
+      await Share.share({ message: text });
+    } catch (error) {
+      Alert.alert(t("error"), t("shareError"));
+    }
   }
 
   return (
@@ -56,11 +67,8 @@ export default function DetalheNota({ route, navigation }) {
         <TouchableOpacity onPress={() => copyToClipboard(note.texto)} style={styles.shareBtn}>
           <Text style={styles.shareBtnText}>{t("copy")}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.shareBtn}>
-          <Text style={styles.shareBtnText}>{t("exportPdf")}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.shareBtn}>
-          <Text style={styles.shareBtnText}>{t("sendEmail")}</Text>
+        <TouchableOpacity onPress={() => shareNote(note.texto)} style={styles.shareBtn}>
+          <Text style={styles.shareBtnText}>{t("share")}</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

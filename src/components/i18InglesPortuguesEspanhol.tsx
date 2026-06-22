@@ -53,7 +53,6 @@ const resources = {
       missingTokenOrId: "Token ou ID não retornados pelo servidor.",
       loginFailed: "Não foi possível realizar o login.",
 
-     
       noteNotFound: "Nota não encontrada",
       backToHome: "Voltar para Home",
       back: "Voltar",
@@ -63,10 +62,9 @@ const resources = {
       addedOn: "Adicionado em",
       noContent: "Sem conteúdo.",
       copy: "Copiar",
-      exportPdf: "Exportar PDF",
-      sendEmail: "Enviar Email",
+      share: "Compartilhar",
+      shareError: "Não foi possível compartilhar",
 
-     
       chooseColor: "Escolha a cor:",
       yellow: "Amarelo",
       green: "Verde",
@@ -131,7 +129,6 @@ const resources = {
       missingTokenOrId: "Token or ID not returned by server.",
       loginFailed: "Login failed.",
 
-     
       noteNotFound: "Note not found",
       backToHome: "Back to Home",
       back: "Back",
@@ -141,10 +138,9 @@ const resources = {
       addedOn: "Added on",
       noContent: "No content.",
       copy: "Copy",
-      exportPdf: "Export PDF",
-      sendEmail: "Send Email",
+      share: "Share",
+      shareError: "Unable to share",
 
-     
       chooseColor: "Choose a color:",
       yellow: "Yellow",
       green: "Green",
@@ -209,7 +205,6 @@ const resources = {
       missingTokenOrId: "Token o ID no devueltos por el servidor.",
       loginFailed: "No se pudo iniciar sesión.",
 
-     
       noteNotFound: "Nota no encontrada",
       backToHome: "Volver al inicio",
       back: "Volver",
@@ -219,10 +214,9 @@ const resources = {
       addedOn: "Agregado en",
       noContent: "Sin contenido.",
       copy: "Copiar",
-      exportPdf: "Exportar PDF",
-      sendEmail: "Enviar correo",
+      share: "Compartir",
+      shareError: "No se pudo compartir",
 
-     
       chooseColor: "Elige un color:",
       yellow: "Amarillo",
       green: "Verde",
@@ -240,7 +234,7 @@ const resources = {
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: "pt", 
+  lng: "pt",
   fallbackLng: "en",
   interpolation: { escapeValue: false }
 });
