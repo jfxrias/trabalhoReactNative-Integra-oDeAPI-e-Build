@@ -70,7 +70,9 @@ json
 
 👥 Participantes
 Emily Neves;
+
 João Pedro Mazzotti de Almeida Ricken;
+
 João Gabriel Farias
 
 
