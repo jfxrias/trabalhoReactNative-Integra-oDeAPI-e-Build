@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabRoutes from "./TabRoutes";
 import DetalheNotaScreen from "../screens/DetalheNota/DetalheNotaScreen";
-// Importa o contexto
+
 import { ThemeContext } from "../presentation/context/ThemeContext";
 
 const Stack = createNativeStackNavigator();

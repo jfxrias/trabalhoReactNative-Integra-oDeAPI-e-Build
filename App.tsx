@@ -6,17 +6,16 @@ import { FontProvider } from "./src/presentation/context/FontContext";
 import PrivateRoutes from "./src/routes/PrivateRoutes";
 import "./src/components/i18InglesPortuguesEspanhol";
 
-
 export default function App() {
   return (
-    <AuthProvider>
-      <NotesProvider>
-        <ThemeProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <NotesProvider>
           <FontProvider>
             <PrivateRoutes />
           </FontProvider>
-        </ThemeProvider>
-      </NotesProvider>
-    </AuthProvider>
+        </NotesProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

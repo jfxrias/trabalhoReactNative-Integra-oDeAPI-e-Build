@@ -72,7 +72,7 @@ export default function Configuracoes() {
     }
   };
 
-  // Cores dinâmicas expandidas para cobrir inputs e bordas
+  
   const dynamicStyles = {
     container: { backgroundColor: darkMode ? "#121212" : "#FFFFFF" },
     text: { color: darkMode ? "#FFFFFF" : "#121212" },
@@ -86,7 +86,7 @@ export default function Configuracoes() {
       <Text style={[styles.title, dynamicStyles.text]}>{t("settings")}</Text>
       {mensagem ? <Text style={styles.feedback}>{mensagem}</Text> : null}
 
-      {/* SEÇÃO: DARK MODE */}
+     
       <View style={[styles.section, dynamicStyles.section, { flexDirection: "row", justifyContent: "space-between", alignItems: "center" }]}>
         <Text style={[styles.sectionTitle, dynamicStyles.text, { marginBottom: 0 }]}>🌓 Dark Mode</Text>
         <Switch
@@ -97,7 +97,7 @@ export default function Configuracoes() {
         />
       </View>
 
-      {/* SEÇÃO: CONTA */}
+     
       <View style={[styles.section, dynamicStyles.section]}>
         <Text style={[styles.sectionTitle, dynamicStyles.text]}>🔑 {t("account")}</Text>
         <TextInput
@@ -124,7 +124,7 @@ export default function Configuracoes() {
         </TouchableOpacity>
       </View>
 
-      {/* SEÇÃO: IDIOMA */}
+    
       <View style={[styles.section, dynamicStyles.section]}>
         <Text style={[styles.sectionTitle, dynamicStyles.text]}>🌐 {t("language")}</Text>
         <Picker
@@ -139,7 +139,7 @@ export default function Configuracoes() {
         </Picker>
       </View>
 
-      {/* SEÇÃO: PREFERÊNCIAS DE FONTE */}
+    
       <View style={[styles.section, dynamicStyles.section]}>
         <Text style={[styles.sectionTitle, dynamicStyles.text]}>🔠 {t("fontPreferences")}</Text>
         <Text style={[styles.label, dynamicStyles.subText]}>{t("fontSize")}</Text>
@@ -183,7 +183,7 @@ export default function Configuracoes() {
         </Text>
       </View>
 
-      {/* SEÇÃO: LOGOUT */}
+     
       <View style={[styles.section, dynamicStyles.section]}>
         <TouchableOpacity
           style={[styles.button, { backgroundColor: "red" }]}

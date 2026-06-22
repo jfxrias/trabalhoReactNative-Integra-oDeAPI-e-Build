@@ -2,13 +2,13 @@ import React, { useContext, useState } from "react";
 import { View, Text, TextInput, Button, FlatList, Alert } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { NotesContext } from "../../presentation/context/NotesContext";
-import { ThemeContext } from "../../presentation/context/ThemeContext"; // <-- ADICIONADO
+import { ThemeContext } from "../../presentation/context/ThemeContext"; 
 import { useTranslation } from "react-i18next"; 
 import styles from "./styles";
 
 export default function MinhasNotasScreen() {
   const { notes, addNote, updateNote, deleteNote } = useContext(NotesContext);
-  const { darkMode } = useContext(ThemeContext); // <-- ADICIONADO
+  const { darkMode } = useContext(ThemeContext); 
   const [newNote, setNewNote] = useState("");
   const [selectedColor, setSelectedColor] = useState("#ffff88");
 
