@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../presentation/context/AuthContext";
-// 1. Importe o ThemeContext do seu grupo
 import { ThemeContext } from "../presentation/context/ThemeContext"; 
 import StackRoutes from "./StackRoutes";
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native";

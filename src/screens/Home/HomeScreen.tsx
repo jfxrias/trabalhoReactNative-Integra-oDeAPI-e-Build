@@ -53,7 +53,7 @@ export default function Home({ navigation }) {
               navigation.navigate('DetalheNota', { id: item.idBloco })
             }
           >
-            {/* Mantemos a cor customizada do card, mas garantimos que o texto se adapte se a cor for muito escura */}
+            
             <View style={[styles.card, { backgroundColor: item.cor || (darkMode ? '#1e1e1e' : '#fff') }]}>
               <Text style={[styles.cardText, { fontSize, fontFamily, color: item.cor === '#000000' ? '#fff' : '#121212' }]}>
                 {item.texto}

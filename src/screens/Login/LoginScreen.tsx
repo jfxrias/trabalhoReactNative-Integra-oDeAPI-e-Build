@@ -3,7 +3,7 @@ import { View, Text, TextInput, Button, Alert } from "react-native";
 import styles from "./styles";
 import api from "../../data/api";
 import { AuthContext } from "../../presentation/context/AuthContext";
-import { ThemeContext } from "../../presentation/context/ThemeContext"; // <-- ADICIONADO
+import { ThemeContext } from "../../presentation/context/ThemeContext"; 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTranslation } from "react-i18next"; 
 
@@ -11,7 +11,7 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const { login: authLogin } = useContext(AuthContext);
-  const { darkMode } = useContext(ThemeContext); // <-- ADICIONADO
+  const { darkMode } = useContext(ThemeContext); 
   const { t } = useTranslation(); 
 
   const theme = {

@@ -3,7 +3,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/Home/HomeScreen";
 import MinhasNotasScreen from "../screens/MinhasNotas/MinhasNotas";
 import ConfiguracoesScreen from "../screens/Configuracoes/ConfiguracoesScreen";
-// Importa o contexto
 import { ThemeContext } from "../presentation/context/ThemeContext";
 
 const Tab = createBottomTabNavigator();
