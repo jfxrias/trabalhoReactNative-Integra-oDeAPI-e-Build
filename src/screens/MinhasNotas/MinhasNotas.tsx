@@ -2,11 +2,13 @@ import React, { useContext, useState } from "react";
 import { View, Text, TextInput, Button, FlatList, Alert } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { NotesContext } from "../../presentation/context/NotesContext";
-import { useTranslation } from "react-i18next"; // import para tradução
+import { ThemeContext } from "../../presentation/context/ThemeContext"; // <-- ADICIONADO
+import { useTranslation } from "react-i18next"; 
 import styles from "./styles";
 
 export default function MinhasNotasScreen() {
   const { notes, addNote, updateNote, deleteNote } = useContext(NotesContext);
+  const { darkMode } = useContext(ThemeContext); // <-- ADICIONADO
   const [newNote, setNewNote] = useState("");
   const [selectedColor, setSelectedColor] = useState("#ffff88");
 
@@ -14,6 +16,12 @@ export default function MinhasNotasScreen() {
   const [editingText, setEditingText] = useState("");
 
   const { t } = useTranslation(); 
+
+  const theme = {
+    bg: darkMode ? '#121212' : '#ffffff',
+    text: darkMode ? '#ffffff' : '#333333',
+    inputBg: darkMode ? '#1e1e1e' : '#ffffff',
+  };
 
   const handleSaveEdit = () => {
     if (!editingText.trim()) {
@@ -29,23 +37,26 @@ export default function MinhasNotasScreen() {
 
   return (
     <FlatList
+      style={{ backgroundColor: theme.bg }} // <-- ADICIONADO
       data={notes}
       keyExtractor={(item) => item.idBloco}
       ListHeaderComponent={
-        <View>
-          <Text style={styles.title}>{t("myNotes")}</Text>
+        <View style={{ padding: 10 }}>
+          <Text style={[styles.title, { color: theme.text }]}>{t("myNotes")}</Text>
 
           <TextInput
             placeholder={t("addNote")}
+            placeholderTextColor={darkMode ? "#888" : "#999"}
             value={newNote}
             onChangeText={setNewNote}
-            style={styles.input}
+            style={[styles.input, { backgroundColor: theme.inputBg, color: theme.text }]}
           />
 
-          <Text style={styles.label}>{t("chooseColor")}</Text>
+          <Text style={[styles.label, { color: theme.text }]}>{t("chooseColor")}</Text>
           <Picker
             selectedValue={selectedColor}
-            style={styles.input}
+            style={[styles.input, { backgroundColor: theme.inputBg, color: theme.text }]}
+            dropdownIconColor={theme.text}
             onValueChange={(value) => setSelectedColor(value)}
           >
             <Picker.Item label={t("yellow")} value="#ffff88" />
@@ -76,9 +87,10 @@ export default function MinhasNotasScreen() {
             <View style={{ marginVertical: 20 }}>
               <TextInput
                 placeholder={t("edit")}
+                placeholderTextColor={darkMode ? "#888" : "#999"}
                 value={editingText}
                 onChangeText={setEditingText}
-                style={styles.input}
+                style={[styles.input, { backgroundColor: theme.inputBg, color: theme.text }]}
               />
               <Button title={t("save")} onPress={handleSaveEdit} />
               <Button title={t("cancel")} color="gray" onPress={() => setEditingId(null)} />
@@ -87,21 +99,23 @@ export default function MinhasNotasScreen() {
         </View>
       }
       renderItem={({ item }) => (
-        <View style={[styles.noteCard, { backgroundColor: item.cor || "#fff" }]}>
-          <Text style={styles.noteText}>{item.texto}</Text>
-          <Button
-            title={t("edit")}
-            onPress={() => {
-              setEditingId(item.idBloco);
-              setEditingText(item.texto);
-              setSelectedColor(item.cor);
-            }}
-          />
-          <Button
-            title={t("delete")}
-            color="red"
-            onPress={() => deleteNote(item.idBloco)}
-          />
+        <View style={[styles.noteCard, { backgroundColor: item.cor || "#fff", marginHorizontal: 10, marginBottom: 10 }]}>
+          <Text style={[styles.noteText, { color: item.cor === '#000000' ? '#fff' : '#121212' }]}>{item.texto}</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10 }}>
+            <Button
+              title={t("edit")}
+              onPress={() => {
+                setEditingId(item.idBloco);
+                setEditingText(item.texto);
+                setSelectedColor(item.cor);
+              }}
+            />
+            <Button
+              title={t("delete")}
+              color="red"
+              onPress={() => deleteNote(item.idBloco)}
+            />
+          </View>
         </View>
       )}
       contentContainerStyle={{ paddingBottom: 40 }}

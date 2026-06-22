@@ -5,11 +5,13 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Switch,
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useFont } from "../../presentation/context/FontContext";
 import { Picker } from "@react-native-picker/picker";
 import { AuthContext } from "../../presentation/context/AuthContext";
+import { ThemeContext } from "../../presentation/context/ThemeContext"; 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import api from "../../data/api"; 
 import styles from "./styles";
@@ -23,6 +25,7 @@ export default function Configuracoes() {
   const { t, i18n } = useTranslation();
 
   const { userId, user, setUser, logout } = useContext(AuthContext);
+  const { darkMode, setDarkMode } = useContext(ThemeContext); 
 
   const alterarSenha = async () => {
     try {
@@ -40,7 +43,6 @@ export default function Configuracoes() {
       const resp = await api.put(`/configuracoes/perfil/${userId}`, { login });
       setMensagem(resp.data.mensagem);
 
-     
       setUser({
         ...user,
         login: resp.data.login,
@@ -70,19 +72,41 @@ export default function Configuracoes() {
     }
   };
 
+  // Cores dinâmicas expandidas para cobrir inputs e bordas
+  const dynamicStyles = {
+    container: { backgroundColor: darkMode ? "#121212" : "#FFFFFF" },
+    text: { color: darkMode ? "#FFFFFF" : "#121212" },
+    subText: { color: darkMode ? "#AAAAAA" : "#666666" },
+    section: { backgroundColor: darkMode ? "#1E1E1E" : "#F5F5F5", padding: 15, borderRadius: 8, marginBottom: 15 },
+    input: { backgroundColor: darkMode ? "#2D2D2D" : "#FFFFFF", color: darkMode ? "#FFFFFF" : "#121212", borderColor: darkMode ? "#444444" : "#CCCCCC" }
+  };
+
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>{t("settings")}</Text>
+    <ScrollView style={[styles.container, dynamicStyles.container]}>
+      <Text style={[styles.title, dynamicStyles.text]}>{t("settings")}</Text>
       {mensagem ? <Text style={styles.feedback}>{mensagem}</Text> : null}
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>🔑 {t("account")}</Text>
+      {/* SEÇÃO: DARK MODE */}
+      <View style={[styles.section, dynamicStyles.section, { flexDirection: "row", justifyContent: "space-between", alignItems: "center" }]}>
+        <Text style={[styles.sectionTitle, dynamicStyles.text, { marginBottom: 0 }]}>🌓 Dark Mode</Text>
+        <Switch
+          value={darkMode}
+          onValueChange={(value) => setDarkMode(value)}
+          trackColor={{ false: "#767577", true: "#0A84FF" }}
+          thumbColor={darkMode ? "#fff" : "#f4f3f4"}
+        />
+      </View>
+
+      {/* SEÇÃO: CONTA */}
+      <View style={[styles.section, dynamicStyles.section]}>
+        <Text style={[styles.sectionTitle, dynamicStyles.text]}>🔑 {t("account")}</Text>
         <TextInput
           secureTextEntry
           placeholder={t("newPassword")}
+          placeholderTextColor={darkMode ? "#888" : "#999"}
           value={senhaNova}
           onChangeText={setSenhaNova}
-          style={styles.input}
+          style={[styles.input, dynamicStyles.input]}
         />
         <TouchableOpacity style={styles.button} onPress={alterarSenha}>
           <Text style={styles.buttonText}>{t("changePassword")}</Text>
@@ -90,20 +114,23 @@ export default function Configuracoes() {
 
         <TextInput
           placeholder={t("login")}
+          placeholderTextColor={darkMode ? "#888" : "#999"}
           value={login}
           onChangeText={setLogin}
-          style={styles.input}
+          style={[styles.input, dynamicStyles.input]}
         />
         <TouchableOpacity style={styles.button} onPress={atualizarPerfil}>
           <Text style={styles.buttonText}>{t("updateProfile")}</Text>
         </TouchableOpacity>
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>🌐 {t("language")}</Text>
+      {/* SEÇÃO: IDIOMA */}
+      <View style={[styles.section, dynamicStyles.section]}>
+        <Text style={[styles.sectionTitle, dynamicStyles.text]}>🌐 {t("language")}</Text>
         <Picker
           selectedValue={idioma}
-          style={styles.input}
+          style={[styles.input, dynamicStyles.input]}
+          dropdownIconColor={darkMode ? "#FFFFFF" : "#121212"}
           onValueChange={(value) => mudarIdioma(value)}
         >
           <Picker.Item label="Português" value="pt" />
@@ -112,9 +139,10 @@ export default function Configuracoes() {
         </Picker>
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>🔠 {t("fontPreferences")}</Text>
-        <Text style={styles.label}>{t("fontSize")}</Text>
+      {/* SEÇÃO: PREFERÊNCIAS DE FONTE */}
+      <View style={[styles.section, dynamicStyles.section]}>
+        <Text style={[styles.sectionTitle, dynamicStyles.text]}>🔠 {t("fontPreferences")}</Text>
+        <Text style={[styles.label, dynamicStyles.subText]}>{t("fontSize")}</Text>
         <TextInput
           keyboardType="numeric"
           value={String(fontSize)}
@@ -126,13 +154,14 @@ export default function Configuracoes() {
               setFontSize(0);
             }
           }}
-          style={styles.input}
+          style={[styles.input, dynamicStyles.input]}
         />
 
-        <Text style={styles.label}>{t("fontType")}</Text>
+        <Text style={[styles.label, dynamicStyles.subText]}>{t("fontType")}</Text>
         <Picker
           selectedValue={fontFamily}
-          style={styles.input}
+          style={[styles.input, dynamicStyles.input]}
+          dropdownIconColor={darkMode ? "#FFFFFF" : "#121212"}
           onValueChange={(value) => setFontFamily(value)}
         >
           <Picker.Item label="Arial" value="Arial" />
@@ -149,12 +178,13 @@ export default function Configuracoes() {
           <Picker.Item label="Segoe UI" value="Segoe UI" />
           <Picker.Item label="Helvetica" value="Helvetica" />
         </Picker>
-        <Text style={[styles.preview, { fontSize, fontFamily }]}>
+        <Text style={[styles.preview, dynamicStyles.text, { fontSize, fontFamily, marginTop: 10 }]}>
           {t("previewText", { size: fontSize, font: fontFamily })}
         </Text>
       </View>
 
-      <View style={styles.section}>
+      {/* SEÇÃO: LOGOUT */}
+      <View style={[styles.section, dynamicStyles.section]}>
         <TouchableOpacity
           style={[styles.button, { backgroundColor: "red" }]}
           onPress={logout}

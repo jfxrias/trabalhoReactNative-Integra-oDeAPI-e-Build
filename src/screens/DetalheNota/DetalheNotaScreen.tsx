@@ -11,10 +11,10 @@ export default function DetalheNota({ route, navigation }) {
   const { notes } = useContext(NotesContext);
   const { darkMode } = useContext(ThemeContext);
   const { fontSize, fontFamily } = useFont();
-  const { t } = useTranslation(); // hook para pegar textos traduzidos
+  const { t } = useTranslation(); 
 
   const theme = {
-    bg: darkMode ? '#1a1a2e' : '#f8f8f8',
+    bg: darkMode ? '#121212' : '#f8f8f8',
     text: darkMode ? '#e0e0e0' : '#333',
   };
 
@@ -40,14 +40,14 @@ export default function DetalheNota({ route, navigation }) {
   return (
     <ScrollView style={[styles.container, { backgroundColor: theme.bg }]}>
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-        <Text style={styles.backBtnText}>← {t("back")}</Text>
+        <Text style={[styles.backBtnText, { color: theme.text }]}>← {t("back")}</Text>
       </TouchableOpacity>
 
       <View style={[styles.noteCard, { backgroundColor: cor }]}>
         {categoria && <Text style={styles.noteCategory}>{categoria}</Text>}
-        <Text style={styles.noteTitle}>{texto || t("noTitle")}</Text>
-        {createdAt && <Text style={styles.noteDate}>{t("addedOn")}: {createdAt}</Text>}
-        <Text style={[styles.noteContent, { fontSize, fontFamily }]}>
+        <Text style={[styles.noteTitle, { color: cor === '#000000' ? '#fff' : '#121212' }]}>{texto || t("noTitle")}</Text>
+        {createdAt && <Text style={[styles.noteDate, { color: cor === '#000000' ? '#ccc' : '#666' }]}>{t("addedOn")}: {createdAt}</Text>}
+        <Text style={[styles.noteContent, { fontSize, fontFamily, color: cor === '#000000' ? '#fff' : '#333' }]}>
           {texto || t("noContent")}
         </Text>
       </View>

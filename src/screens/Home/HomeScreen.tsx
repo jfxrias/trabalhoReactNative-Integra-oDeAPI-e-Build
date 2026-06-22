@@ -3,14 +3,14 @@ import { View, Text, FlatList, TouchableOpacity, TextInput } from 'react-native'
 import { NotesContext } from '../../presentation/context/NotesContext';
 import { ThemeContext } from '../../presentation/context/ThemeContext';
 import { useFont } from '../../presentation/context/FontContext';
-import { useTranslation } from 'react-i18next'; // import para tradução
+import { useTranslation } from 'react-i18next'; 
 import styles from './styles';
 
 export default function Home({ navigation }) {
   const { notes } = useContext(NotesContext);
   const { darkMode } = useContext(ThemeContext);
   const { fontSize, fontFamily } = useFont();
-  const { t } = useTranslation(); // hook para pegar textos traduzidos
+  const { t } = useTranslation(); 
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -25,8 +25,10 @@ export default function Home({ navigation }) {
   );
 
   const theme = {
-    bg: darkMode ? '#1a1a2e' : '#f8f8f8',
-    text: darkMode ? '#e0e0e0' : '#333',
+    bg: darkMode ? '#121212' : '#f8f8f8',
+    text: darkMode ? '#ffffff' : '#333333',
+    inputBg: darkMode ? '#1e1e1e' : '#ffffff',
+    inputBorder: darkMode ? '#333333' : '#cccccc',
   };
 
   return (
@@ -34,10 +36,10 @@ export default function Home({ navigation }) {
     
       <Text style={[styles.title, { color: theme.text }]}>{t("homeTitle")}</Text>
 
-  
       <TextInput
-        style={styles.searchInput}
+        style={[styles.searchInput, { backgroundColor: theme.inputBg, color: theme.text, borderColor: theme.inputBorder }]}
         placeholder={t("searchNote")} 
+        placeholderTextColor={darkMode ? "#888" : "#999"}
         value={searchTerm}
         onChangeText={setSearchTerm}
       />
@@ -51,8 +53,9 @@ export default function Home({ navigation }) {
               navigation.navigate('DetalheNota', { id: item.idBloco })
             }
           >
-            <View style={[styles.card, { backgroundColor: item.cor }]}>
-              <Text style={[styles.cardText, { fontSize, fontFamily }]}>
+            {/* Mantemos a cor customizada do card, mas garantimos que o texto se adapte se a cor for muito escura */}
+            <View style={[styles.card, { backgroundColor: item.cor || (darkMode ? '#1e1e1e' : '#fff') }]}>
+              <Text style={[styles.cardText, { fontSize, fontFamily, color: item.cor === '#000000' ? '#fff' : '#121212' }]}>
                 {item.texto}
               </Text>
             </View>
