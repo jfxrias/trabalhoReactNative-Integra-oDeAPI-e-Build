@@ -67,6 +67,10 @@ json
   "login": "email@dominio.com"
 }
 
+## 📱 Download do APK
+
+Você pode baixar a versão mais recente do aplicativo aqui:  
+[⬇️ Baixar APK](https://expo.dev/accounts/jpmazzotti/projects/trabalhoFinal/builds/8396d482-5d8e-482c-80c9-c3d688a4c27e)
 
 👥 Participantes
 Emily Neves;
