@@ -13,10 +13,11 @@ export default function Home({ navigation }) {
   const { t } = useTranslation(); 
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredNotes = useMemo(() =>
-    notes.filter((note: any) =>
-      !searchTerm || note.texto?.toLowerCase().includes(searchTerm.toLowerCase())
-    ),
+  const filteredNotes = useMemo(
+    () =>
+      notes.filter((note: any) =>
+        !searchTerm || note.texto?.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
     [notes, searchTerm]
   );
 
@@ -28,10 +29,20 @@ export default function Home({ navigation }) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.bg }]}>
-      <Text style={[styles.title, { color: theme.text, marginTop: 20 }]}>{t("homeTitle") || "Início"}</Text>
+      <Text style={[styles.title, { color: theme.text, marginTop: 20 }]}>
+        {t("homeTitle") || "Início"}
+      </Text>
 
       <TextInput
-        style={[styles.input, { backgroundColor: theme.inputBg, color: theme.text, borderColor: darkMode ? '#333' : '#ddd', borderWidth: 1 }]}
+        style={[
+          styles.input,
+          {
+            backgroundColor: theme.inputBg,
+            color: theme.text,
+            borderColor: darkMode ? '#333' : '#ddd',
+            borderWidth: 1,
+          },
+        ]}
         placeholder={t("searchNote") || "Buscar nota..."} 
         placeholderTextColor={darkMode ? "#888" : "#999"}
         value={searchTerm}
@@ -43,14 +54,28 @@ export default function Home({ navigation }) {
         keyExtractor={(item) => String(item.idBloco)}
         contentContainerStyle={{ padding: 16 }}
         renderItem={({ item }) => {
-          const isDarkBackground = item.cor === '#000000' || item.cor === '#1e1e1e';
+         
+          const corValida = item.cor && item.cor !== "[NULL]" ? item.cor : "#fff";
+          const isDarkBackground = corValida === '#000000' || corValida === '#1e1e1e';
           const textColor = isDarkBackground ? '#ffffff' : '#1f2937';
 
           return (
-            <TouchableOpacity onPress={() => navigation.navigate('DetalheNota', { id: item.idBloco })}>
-              <View style={[styles.noteCard, { backgroundColor: item.cor || "#fff", marginBottom: 15 }]}>
-                <Text style={[styles.noteText, { fontSize, fontFamily, color: textColor }]}>
-                  {item.texto}
+            <TouchableOpacity
+              onPress={() => navigation.navigate('DetalheNota', { id: item.idBloco })}
+            >
+              <View
+                style={[
+                  styles.noteCard,
+                  { backgroundColor: corValida, marginBottom: 15 },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.noteText,
+                    { fontSize, fontFamily, color: textColor },
+                  ]}
+                >
+                  {item.texto || "Sem conteúdo"}
                 </Text>
               </View>
             </TouchableOpacity>

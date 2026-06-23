@@ -1,57 +1,52 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 20,
   },
   title: {
-    fontSize: 28,
-    fontWeight: "900", // Peso extra na fonte
-    marginBottom: 25,
-    letterSpacing: -0.5,
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 10,
   },
   input: {
-    borderRadius: 14, // Cantos mais arredondados
-    padding: 16,
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    marginBottom: 10,
+    borderWidth: 1,
+  },
+  noteCard: {
+    padding: 15,
+    borderRadius: 8,
+    marginBottom: 20,
+    borderWidth: 1,
+  },
+  noteText: {
     fontSize: 16,
     marginBottom: 10,
   },
-  noteCard: {
-    padding: 22,
-    borderRadius: 20, // Card bem arredondado estilo iOS
-    marginBottom: 18,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 4,
-    borderWidth: 0, // Tiramos a borda para ficar mais "limpo"
-  },
-  noteText: {
-    fontSize: 17,
-    lineHeight: 26,
-    marginBottom: 18,
-  },
   actions: {
     flexDirection: "row",
-    justifyContent: "flex-end",
-    gap: 20,
-  },
-  primaryBtn: {
-    padding: 18,
-    borderRadius: 14,
-    alignItems: 'center',
+    justifyContent: "space-around",
     marginTop: 10,
   },
+  primaryBtn: {
+    padding: 12,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 20,
+  },
   primaryBtnText: {
-    color: '#ffffff',
-    fontWeight: '700',
-    fontSize: 16,
-    letterSpacing: 0.5,
+    color: "#ffffff",
+    fontWeight: "bold",
+    fontSize: 15,
   },
   actionText: {
-    fontWeight: '700',
-    fontSize: 15,
-  }
+    fontWeight: "600",
+    fontSize: 14,
+  },
 });
 
 export default styles;
