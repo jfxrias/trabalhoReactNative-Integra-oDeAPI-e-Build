@@ -31,7 +31,7 @@ CREATE TABLE bloco (
 
 CREATE INDEX idx_bloco_usuario ON bloco(id_usuario);
 
-##🔑 Autenticação  A API possui endpoints para autenticação e cadastro de usuários:
+## 🔑 Autenticação  A API possui endpoints para autenticação e cadastro de usuários:
 
 Cadastro de usuário
 
