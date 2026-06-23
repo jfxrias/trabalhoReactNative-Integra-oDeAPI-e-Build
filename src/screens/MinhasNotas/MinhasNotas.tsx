@@ -1,18 +1,16 @@
 import React, { useContext, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, FlatList, Alert } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, FlatList } from "react-native";
 import { NotesContext } from "../../presentation/context/NotesContext";
 import { ThemeContext } from "../../presentation/context/ThemeContext";
 import { useTranslation } from "react-i18next";
 import styles from "./styles";
 
 const COR_OPCOES = [
-  { label: "Amarelo", value: "#FFF9C4" },
-  { label: "Verde", value: "#C8E6C9" },
-  { label: "Azul", value: "#B3E5FC" },
-  { label: "Salmão", value: "#FFCDD2" },
-  { label: "Lavanda", value: "#E1BEE7" },
-  { label: "Laranja", value: "#FFE0B2" },
-  { label: "Branco", value: "#FFFFFF" },
+  "#FFF9C4", "#C8E6C9", "#BBDEFB", "#FFCDD2", "#E1BEE7",
+  "#FFE0B2", "#F5F5F5", "#F48FB1", "#B2DFDB", "#80DEEA",
+  "#D1C4E9", "#DCEDC8", "#FFECB3", "#CFD8DC", "#FFAB91",
+  "#B39DDB", "#AED581", "#90CAF9", "#A5D6A7", "#CE93D8",
+  "#000000"
 ];
 
 export default function MinhasNotas() {
@@ -25,99 +23,132 @@ export default function MinhasNotas() {
   const { t } = useTranslation();
 
   const theme = {
-    bg: darkMode ? '#121212' : '#f5f7fa',
-    text: darkMode ? '#ffffff' : '#1f2937',
-    inputBg: darkMode ? '#1e1e1e' : '#ffffff',
-    borderColor: darkMode ? '#333333' : '#e4e4e7',
-    primary: darkMode ? '#3b82f6' : '#2563eb',
+    bg: darkMode ? "#121212" : "#f5f7fa",
+    text: darkMode ? "#ffffff" : "#1f2937",
+    inputBg: darkMode ? "#1e1e1e" : "#ffffff",
+    borderColor: darkMode ? "#333333" : "#e4e4e7",
+    primary: darkMode ? "#3b82f6" : "#2563eb",
   };
 
   const handleSaveEdit = () => {
-    if (!editingText.trim()) return;
-    if (editingId) {
-      updateNote(editingId, { idBloco: editingId, texto: editingText, cor: selectedColor });
+    if (editingId && editingText.trim()) {
+      updateNote(editingId, {
+        idBloco: editingId,
+        texto: editingText,
+        cor: selectedColor,
+      });
       setEditingId(null);
       setEditingText("");
     }
   };
 
   return (
-    <FlatList
-      style={{ backgroundColor: theme.bg, flex: 1 }}
-      data={notes}
-      keyExtractor={(item) => item.idBloco || Math.random().toString()}
-      ListHeaderComponent={
-        <View style={{ padding: 15 }}>
-          <Text style={[styles.title, { color: theme.text }]}>{t("myNotes")}</Text>
-          
-          <View style={{ backgroundColor: theme.inputBg, padding: 15, borderRadius: 12, marginBottom: 20, borderWidth: 1, borderColor: theme.borderColor }}>
-            <TextInput
-              placeholder={editingId ? t("edit") : t("addNote")}
-              placeholderTextColor={darkMode ? "#888" : "#999"}
-              value={editingId ? editingText : newNote}
-              onChangeText={editingId ? setEditingText : setNewNote}
-              multiline
-              style={[styles.input, { backgroundColor: darkMode ? '#27272a' : '#f4f4f5', color: theme.text }]}
-            />
+    <View style={[styles.container, { backgroundColor: theme.bg }]}>
+      <Text style={[styles.title, { color: theme.text }]}>
+        {t("myNotes") || "Minhas Notas"}
+      </Text>
 
-            <Text style={[styles.label, { color: theme.text, marginBottom: 10 }]}>{t("chooseColor")}</Text>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 15 }}>
-              {COR_OPCOES.map((item) => (
+      <TextInput
+        placeholder={
+          editingId ? t("edit") || "Editar nota" : t("addNote") || "Adicionar nota"
+        }
+        placeholderTextColor={darkMode ? "#888" : "#999"}
+        value={editingId ? editingText : newNote}
+        onChangeText={editingId ? setEditingText : setNewNote}
+        style={[
+          styles.input,
+          {
+            backgroundColor: theme.inputBg,
+            color: theme.text,
+            borderColor: theme.borderColor,
+            borderWidth: 1,
+          },
+        ]}
+      />
+
+      <Text style={[styles.label, { color: theme.text, marginBottom: 10 }]}>
+        {t("chooseColor") || "Escolha uma cor"}
+      </Text>
+
+      <View style={{ flexDirection: "row", flexWrap: "wrap", marginBottom: 15 }}>
+        {COR_OPCOES.map((cor) => (
+          <TouchableOpacity
+            key={cor}
+            onPress={() => setSelectedColor(cor)}
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 8,
+              backgroundColor: cor,
+              borderWidth: selectedColor === cor ? 3 : 1,
+              borderColor: selectedColor === cor ? "#000" : "#ccc",
+              marginRight: 10,
+              marginBottom: 10,
+            }}
+          />
+        ))}
+      </View>
+
+      <TouchableOpacity
+        style={[styles.primaryBtn, { backgroundColor: theme.primary }]}
+        onPress={
+          editingId
+            ? handleSaveEdit
+            : () => {
+                if (newNote.trim()) {
+                  addNote({ texto: newNote, cor: selectedColor });
+                  setNewNote("");
+                }
+              }
+        }
+      >
+        <Text style={styles.primaryBtnText}>
+          {editingId ? t("save") || "Salvar" : t("addNote") || "Adicionar"}
+        </Text>
+      </TouchableOpacity>
+
+      {editingId && (
+        <TouchableOpacity
+          style={[styles.primaryBtn, { backgroundColor: "gray", marginTop: 10 }]}
+          onPress={() => {
+            setEditingId(null);
+            setEditingText("");
+          }}
+        >
+          <Text style={styles.primaryBtnText}>{t("cancel") || "Cancelar"}</Text>
+        </TouchableOpacity>
+      )}
+
+      <FlatList
+        data={notes}
+        keyExtractor={(item, index) =>
+          item.idBloco ? String(item.idBloco) : String(index)
+        }
+        renderItem={({ item }) => {
+          const corValida = item.cor && item.cor !== "[NULL]" ? item.cor : "#FFF9C4";
+          const textoValido = item.texto || t("noContent") || "Sem conteúdo";
+
+          return (
+            <View style={[styles.noteCard, { backgroundColor: corValida }]}>
+              <Text style={styles.noteText}>{textoValido}</Text>
+              <View style={styles.actions}>
                 <TouchableOpacity
-                  key={item.value}
-                  onPress={() => setSelectedColor(item.value)}
-                  style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 8,
-                    backgroundColor: item.value,
-                    borderWidth: selectedColor === item.value ? 3 : 1,
-                    borderColor: selectedColor === item.value ? (darkMode ? '#fff' : '#000') : '#ccc',
+                  onPress={() => {
+                    setEditingId(item.idBloco);
+                    setEditingText(item.texto || "");
+                    setSelectedColor(corValida);
                   }}
-                />
-              ))}
+                >
+                  <Text style={styles.actionText}>{t("edit") || "Editar"}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => deleteNote(item.idBloco)}>
+                  <Text style={styles.actionText}>{t("delete") || "Excluir"}</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-
-            <TouchableOpacity 
-              style={[styles.primaryBtn, { backgroundColor: theme.primary }]} 
-              onPress={editingId ? handleSaveEdit : () => { addNote({ texto: newNote, cor: selectedColor }); setNewNote(""); }}
-            >
-              <Text style={styles.primaryBtnText}>{editingId ? t("save") : t("addNote")}</Text>
-            </TouchableOpacity>
-            
-            {editingId && (
-              <TouchableOpacity style={[styles.primaryBtn, { backgroundColor: 'gray', marginTop: 10 }]} onPress={() => setEditingId(null)}>
-                <Text style={styles.primaryBtnText}>{t("cancel")}</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        </View>
-      }
-      renderItem={({ item }) => {
-        const isDarkBackground = item.cor === '#000000' || item.cor === '#1e1e1e';
-        const textColor = isDarkBackground ? '#ffffff' : '#1f2937';
-
-        return (
-          <View style={[styles.noteCard, { 
-            backgroundColor: item.cor || "#ffff88", 
-            marginHorizontal: 16 
-          }]}>
-            <Text style={[styles.noteText, { color: textColor }]}>{item.texto}</Text>
-            <View style={styles.actions}>
-              <TouchableOpacity onPress={() => { 
-                setEditingId(item.idBloco!); 
-                setEditingText(item.texto); 
-                setSelectedColor(item.cor);
-              }}>
-                <Text style={[styles.actionText, { color: textColor, opacity: 0.7 }]}>{t("edit")}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => deleteNote(item.idBloco!)}>
-                <Text style={[styles.actionText, { color: textColor, opacity: 0.7 }]}>{t("delete")}</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        );
-      }}
-    />
+          );
+        }}
+      />
+    </View>
   );
 }

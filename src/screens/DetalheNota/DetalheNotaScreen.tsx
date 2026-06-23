@@ -8,7 +8,7 @@ import styles from './styles';
 import * as Clipboard from 'expo-clipboard';
 
 export default function DetalheNota({ route, navigation }) {
-  const { id } = route.params;
+  const { id } = route?.params || {};
   const { notes } = useContext(NotesContext);
   const { darkMode } = useContext(ThemeContext);
   const { fontSize, fontFamily } = useFont();
@@ -21,21 +21,24 @@ export default function DetalheNota({ route, navigation }) {
     cardBorder: darkMode ? '#333333' : '#dddddd',
   };
 
-  const note = notes.find((n) => String(n.idBloco) === String(id));
+  const note = id ? notes.find((n) => String(n.idBloco) === String(id)) : null;
 
   if (!note) {
     return (
       <View style={[styles.container, { backgroundColor: theme.bg }]}>
-        <Text style={{ color: theme.text }}>{t("noteNotFound") || "Nota não encontrada"}</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('NotasMain')} style={styles.backBtn}>
-          <Text style={[styles.backBtnText, { color: theme.text }]}>← {t("backToHome") || "Voltar"}</Text>
+        <Text style={{ color: theme.text }}>
+          {t("noteNotFound") || "Nota não encontrada"}
+        </Text>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+          <Text style={[styles.backBtnText, { color: theme.text }]}>
+            ← {t("back") || "Voltar"}
+          </Text>
         </TouchableOpacity>
       </View>
     );
   }
 
   const { texto, cor, categoria, createdAt } = note;
-
   const backgroundColor = cor && cor !== '[NULL]' ? cor : (darkMode ? '#1e1e1e' : '#ffffff');
   const isDarkBackground = backgroundColor === '#000000' || backgroundColor === '#1e1e1e';
   const textColor = isDarkBackground ? '#ffffff' : '#121212';
@@ -57,10 +60,12 @@ export default function DetalheNota({ route, navigation }) {
   return (
     <ScrollView style={[styles.container, { backgroundColor: theme.bg }]}>
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-        <Text style={[styles.backBtnText, { color: theme.text }]}>← {t("back") || "Voltar"}</Text>
+        <Text style={[styles.backBtnText, { color: theme.text }]}>
+          ← {t("back") || "Voltar"}
+        </Text>
       </TouchableOpacity>
 
-      <View style={[styles.noteCard, { backgroundColor: backgroundColor, borderColor: theme.cardBorder }]}>
+      <View style={[styles.noteCard, { backgroundColor, borderColor: theme.cardBorder }]}>
         {categoria && <Text style={[styles.noteCategory, { color: subTextColor }]}>{categoria}</Text>}
         
         <Text style={[styles.noteTitle, { color: textColor }]}>
@@ -80,14 +85,14 @@ export default function DetalheNota({ route, navigation }) {
 
       <View style={styles.actions}>
         <TouchableOpacity 
-          onPress={() => copyToClipboard(note.texto)} 
-          style={[styles.shareBtn, { backgroundColor: theme.primary }]}
+          onPress={() => copyToClipboard(texto || "")} 
+          style={[styles.shareBtn, { backgroundColor: theme.primary, marginRight: 20 }]}
         >
           <Text style={styles.shareBtnText}>{t("copy") || "Copiar"}</Text>
         </TouchableOpacity>
         
         <TouchableOpacity 
-          onPress={() => shareNote(note.texto)} 
+          onPress={() => shareNote(texto || "")} 
           style={[styles.shareBtn, { backgroundColor: theme.primary }]}
         >
           <Text style={styles.shareBtnText}>{t("share") || "Compartilhar"}</Text>

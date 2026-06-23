@@ -4,26 +4,33 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#fff',
   },
-  title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 10,
+  backBtn: {
+    marginBottom: 20,
+  },
+  backBtnText: {
+    fontSize: 16,
+    fontWeight: '500',
   },
   noteCard: {
-    padding: 15,
-    borderRadius: 8,
+    padding: 22,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
     marginBottom: 20,
-    borderWidth: 1,
   },
   noteCategory: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 5,
   },
   noteTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
   },
   noteDate: {
@@ -35,7 +42,7 @@ export default StyleSheet.create({
   },
   actions: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
     marginTop: 20,
   },
   shareBtn: {
@@ -49,11 +56,4 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15,
   },
-  backBtn: {
-    marginBottom: 20,
-  },
-  backBtnText: {
-    fontSize: 16,
-    fontWeight: '500',
-  }
 });

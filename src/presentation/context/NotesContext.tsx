@@ -2,7 +2,6 @@ import { createContext, useState, useEffect, ReactNode } from "react";
 import api from "../../data/api";
 import React from "react";
 
-
 export type Note = {
   idBloco: string;
   texto: string;
@@ -10,15 +9,13 @@ export type Note = {
   categoria?: string;
 };
 
-
 export type NotesContextType = {
   notes: Note[];
   loading: boolean;
-  addNote: (newNote: Note) => Promise<void>;
+  addNote: (newNote: Omit<Note, "idBloco">) => Promise<void>;
   updateNote: (idBloco: string, updatedNote: Note) => Promise<void>;
   deleteNote: (idBloco: string) => Promise<void>;
 };
-
 
 export const NotesContext = createContext<NotesContextType>({} as NotesContextType);
 
@@ -38,9 +35,14 @@ export function NotesProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const addNote = async (newNote: Note) => {
+  const addNote = async (newNote: Omit<Note, "idBloco">) => {
     try {
-      const res = await api.post("/blocos/adicionar", newNote);
+      // gera id automaticamente
+      const noteWithId: Note = {
+        ...newNote,
+        idBloco: String(Date.now()),
+      };
+      const res = await api.post("/blocos/adicionar", noteWithId);
       setNotes((prev) => [...prev, res.data]);
     } catch (err: any) {
       console.log("Erro ao adicionar nota:", err.response?.data || err.message);
