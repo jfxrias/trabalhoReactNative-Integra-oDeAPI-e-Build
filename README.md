@@ -76,6 +76,8 @@ Você pode baixar a versão nova do aplicativo aqui:
 [⬇️ Baixar APK](https://expo.dev/accounts/jpmazzotti/projects/trabalhoFinal/builds/48b9d045-0367-4c5f-8da1-dc641dadde12)
 
 
+
+
 👥 Participantes
 Emily Neves;
 
