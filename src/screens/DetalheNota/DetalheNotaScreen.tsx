@@ -16,7 +16,9 @@ export default function DetalheNota({ route, navigation }) {
 
   const theme = {
     bg: darkMode ? '#121212' : '#f8f8f8',
-    text: darkMode ? '#e0e0e0' : '#333',
+    text: darkMode ? '#e0e0e0' : '#333333',
+    primary: darkMode ? '#3b82f6' : '#6200ee',
+    cardBorder: darkMode ? '#333333' : '#dddddd',
   };
 
   const note = notes.find((n) => String(n.idBloco) === String(id));
@@ -24,56 +26,71 @@ export default function DetalheNota({ route, navigation }) {
   if (!note) {
     return (
       <View style={[styles.container, { backgroundColor: theme.bg }]}>
-        <Text style={{ color: theme.text }}>{t("noteNotFound")}</Text>
+        <Text style={{ color: theme.text }}>{t("noteNotFound") || "Nota não encontrada"}</Text>
         <TouchableOpacity onPress={() => navigation.navigate('NotasMain')} style={styles.backBtn}>
-          <Text style={styles.backBtnText}>← {t("backToHome")}</Text>
+          <Text style={[styles.backBtnText, { color: theme.text }]}>← {t("backToHome") || "Voltar"}</Text>
         </TouchableOpacity>
       </View>
     );
   }
 
-  const { texto, cor = '#FFD966', categoria, createdAt } = note;
+  const { texto, cor, categoria, createdAt } = note;
+
+  const backgroundColor = cor && cor !== '[NULL]' ? cor : (darkMode ? '#1e1e1e' : '#ffffff');
+  const isDarkBackground = backgroundColor === '#000000' || backgroundColor === '#1e1e1e';
+  const textColor = isDarkBackground ? '#ffffff' : '#121212';
+  const subTextColor = isDarkBackground ? '#cccccc' : '#666666';
 
   async function copyToClipboard(text) {
     await Clipboard.setStringAsync(text);
-    Alert.alert(t("copied"), t("copiedToClipboard"));
+    Alert.alert(t("copied") || "Copiado", t("copiedToClipboard") || "Texto copiado para a área de transferência!");
   }
 
   async function shareNote(text) {
     try {
       await Share.share({ message: text });
     } catch (error) {
-      Alert.alert(t("error"), t("shareError"));
+      Alert.alert(t("error") || "Erro", t("shareError") || "Erro ao compartilhar.");
     }
   }
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: theme.bg }]}>
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-        <Text style={[styles.backBtnText, { color: theme.text }]}>← {t("back")}</Text>
+        <Text style={[styles.backBtnText, { color: theme.text }]}>← {t("back") || "Voltar"}</Text>
       </TouchableOpacity>
 
-      <View style={[styles.noteCard, { backgroundColor: cor }]}>
-        {categoria && <Text style={styles.noteCategory}>{categoria}</Text>}
-        <Text style={[styles.noteTitle, { color: cor === '#000000' ? '#fff' : '#121212' }]}>
-          {texto || t("noTitle")}
+      <View style={[styles.noteCard, { backgroundColor: backgroundColor, borderColor: theme.cardBorder }]}>
+        {categoria && <Text style={[styles.noteCategory, { color: subTextColor }]}>{categoria}</Text>}
+        
+        <Text style={[styles.noteTitle, { color: textColor }]}>
+          {texto || t("noTitle") || "Sem Título"}
         </Text>
+        
         {createdAt && (
-          <Text style={[styles.noteDate, { color: cor === '#000000' ? '#ccc' : '#666' }]}>
-            {t("addedOn")}: {createdAt}
+          <Text style={[styles.noteDate, { color: subTextColor }]}>
+            {t("addedOn") || "Adicionado em"}: {createdAt}
           </Text>
         )}
-        <Text style={[styles.noteContent, { fontSize, fontFamily, color: cor === '#000000' ? '#fff' : '#333' }]}>
-          {texto || t("noContent")}
+        
+        <Text style={[styles.noteContent, { fontSize, fontFamily, color: textColor, marginTop: 10 }]}>
+          {texto || t("noContent") || "Sem conteúdo"}
         </Text>
       </View>
 
       <View style={styles.actions}>
-        <TouchableOpacity onPress={() => copyToClipboard(note.texto)} style={styles.shareBtn}>
-          <Text style={styles.shareBtnText}>{t("copy")}</Text>
+        <TouchableOpacity 
+          onPress={() => copyToClipboard(note.texto)} 
+          style={[styles.shareBtn, { backgroundColor: theme.primary }]}
+        >
+          <Text style={styles.shareBtnText}>{t("copy") || "Copiar"}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => shareNote(note.texto)} style={styles.shareBtn}>
-          <Text style={styles.shareBtnText}>{t("share")}</Text>
+        
+        <TouchableOpacity 
+          onPress={() => shareNote(note.texto)} 
+          style={[styles.shareBtn, { backgroundColor: theme.primary }]}
+        >
+          <Text style={styles.shareBtnText}>{t("share") || "Compartilhar"}</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

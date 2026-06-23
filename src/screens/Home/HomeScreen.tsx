@@ -11,34 +11,28 @@ export default function Home({ navigation }) {
   const { darkMode } = useContext(ThemeContext);
   const { fontSize, fontFamily } = useFont();
   const { t } = useTranslation(); 
-
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredNotes = useMemo(
-    () =>
-      notes.filter(
-        (note: any) =>
-          !searchTerm ||
-          note.texto?.toLowerCase().includes(searchTerm.toLowerCase())
-      ),
+  const filteredNotes = useMemo(() =>
+    notes.filter((note: any) =>
+      !searchTerm || note.texto?.toLowerCase().includes(searchTerm.toLowerCase())
+    ),
     [notes, searchTerm]
   );
 
   const theme = {
-    bg: darkMode ? '#121212' : '#f8f8f8',
-    text: darkMode ? '#ffffff' : '#333333',
+    bg: darkMode ? '#121212' : '#f5f7fa',
+    text: darkMode ? '#ffffff' : '#1f2937',
     inputBg: darkMode ? '#1e1e1e' : '#ffffff',
-    inputBorder: darkMode ? '#333333' : '#cccccc',
   };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.bg }]}>
-    
-      <Text style={[styles.title, { color: theme.text }]}>{t("homeTitle")}</Text>
+      <Text style={[styles.title, { color: theme.text, marginTop: 20 }]}>{t("homeTitle") || "Início"}</Text>
 
       <TextInput
-        style={[styles.searchInput, { backgroundColor: theme.inputBg, color: theme.text, borderColor: theme.inputBorder }]}
-        placeholder={t("searchNote")} 
+        style={[styles.input, { backgroundColor: theme.inputBg, color: theme.text, borderColor: darkMode ? '#333' : '#ddd', borderWidth: 1 }]}
+        placeholder={t("searchNote") || "Buscar nota..."} 
         placeholderTextColor={darkMode ? "#888" : "#999"}
         value={searchTerm}
         onChangeText={setSearchTerm}
@@ -47,20 +41,21 @@ export default function Home({ navigation }) {
       <FlatList
         data={filteredNotes}
         keyExtractor={(item) => String(item.idBloco)}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('DetalheNota', { id: item.idBloco })
-            }
-          >
-            
-            <View style={[styles.card, { backgroundColor: item.cor || (darkMode ? '#1e1e1e' : '#fff') }]}>
-              <Text style={[styles.cardText, { fontSize, fontFamily, color: item.cor === '#000000' ? '#fff' : '#121212' }]}>
-                {item.texto}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        )}
+        contentContainerStyle={{ padding: 16 }}
+        renderItem={({ item }) => {
+          const isDarkBackground = item.cor === '#000000' || item.cor === '#1e1e1e';
+          const textColor = isDarkBackground ? '#ffffff' : '#1f2937';
+
+          return (
+            <TouchableOpacity onPress={() => navigation.navigate('DetalheNota', { id: item.idBloco })}>
+              <View style={[styles.noteCard, { backgroundColor: item.cor || "#fff", marginBottom: 15 }]}>
+                <Text style={[styles.noteText, { fontSize, fontFamily, color: textColor }]}>
+                  {item.texto}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          );
+        }}
       />
     </View>
   );
