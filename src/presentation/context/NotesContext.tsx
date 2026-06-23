@@ -1,10 +1,29 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, ReactNode } from "react";
 import api from "../../data/api";
+import React from "react";
 
-export const NotesContext = createContext();
 
-export function NotesProvider({ children }) {
-  const [notes, setNotes] = useState([]);
+export type Note = {
+  idBloco: string;
+  texto: string;
+  cor: string;
+  categoria?: string;
+};
+
+
+export type NotesContextType = {
+  notes: Note[];
+  loading: boolean;
+  addNote: (newNote: Note) => Promise<void>;
+  updateNote: (idBloco: string, updatedNote: Note) => Promise<void>;
+  deleteNote: (idBloco: string) => Promise<void>;
+};
+
+
+export const NotesContext = createContext<NotesContextType>({} as NotesContextType);
+
+export function NotesProvider({ children }: { children: ReactNode }) {
+  const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchNotes = async () => {
@@ -12,48 +31,38 @@ export function NotesProvider({ children }) {
       setLoading(true);
       const res = await api.get("/blocos/listar");
       setNotes(res.data);
-    } catch (err) {
+    } catch (err: any) {
       console.log("Erro ao carregar notas:", err.response?.data || err.message);
     } finally {
       setLoading(false);
     }
   };
 
-  const addNote = async (newNote) => {
+  const addNote = async (newNote: Note) => {
     try {
-
-      const res = await api.post("/blocos/adicionar", {
-        texto: newNote.texto,
-        cor: newNote.cor,
-        categoria: newNote.categoria,
-      });
-  
+      const res = await api.post("/blocos/adicionar", newNote);
       setNotes((prev) => [...prev, res.data]);
-    } catch (err) {
+    } catch (err: any) {
       console.log("Erro ao adicionar nota:", err.response?.data || err.message);
     }
   };
 
-  const updateNote = async (idBloco, updatedNote) => {
+  const updateNote = async (idBloco: string, updatedNote: Note) => {
     try {
-      const res = await api.put(`/blocos/atualizar/${idBloco}`, {
-        texto: updatedNote.texto,
-        cor: updatedNote.cor,
-        categoria: updatedNote.categoria,
-      });
+      const res = await api.put(`/blocos/atualizar/${idBloco}`, updatedNote);
       setNotes((prev) =>
         prev.map((n) => (n.idBloco === idBloco ? res.data : n))
       );
-    } catch (err) {
+    } catch (err: any) {
       console.log("Erro ao atualizar nota:", err.response?.data || err.message);
     }
   };
 
-  const deleteNote = async (idBloco) => {
+  const deleteNote = async (idBloco: string) => {
     try {
       await api.delete(`/blocos/remover/${idBloco}`);
       setNotes((prev) => prev.filter((n) => n.idBloco !== idBloco));
-    } catch (err) {
+    } catch (err: any) {
       console.log("Erro ao excluir nota:", err.response?.data || err.message);
     }
   };

@@ -4,6 +4,7 @@ import HomeScreen from "../screens/Home/HomeScreen";
 import MinhasNotasScreen from "../screens/MinhasNotas/MinhasNotas";
 import ConfiguracoesScreen from "../screens/Configuracoes/ConfiguracoesScreen";
 import { ThemeContext } from "../presentation/context/ThemeContext";
+import DetalheNotaScreen from "../screens/DetalheNota/DetalheNotaScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -27,6 +28,7 @@ export default function TabRoutes() {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Notas" component={MinhasNotasScreen} />
+      <Tab.Screen name="DetalheNota" component={DetalheNotaScreen}/>
       <Tab.Screen name="Configurações" component={ConfiguracoesScreen} />
     </Tab.Navigator>
   );

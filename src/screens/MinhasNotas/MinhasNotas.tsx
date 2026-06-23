@@ -11,10 +11,8 @@ export default function MinhasNotasScreen() {
   const { darkMode } = useContext(ThemeContext); 
   const [newNote, setNewNote] = useState("");
   const [selectedColor, setSelectedColor] = useState("#ffff88");
-
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState("");
-
   const { t } = useTranslation(); 
 
   const theme = {
@@ -37,7 +35,7 @@ export default function MinhasNotasScreen() {
 
   return (
     <FlatList
-      style={{ backgroundColor: theme.bg }} // <-- ADICIONADO
+      style={{ backgroundColor: theme.bg }} 
       data={notes}
       keyExtractor={(item) => item.idBloco}
       ListHeaderComponent={
