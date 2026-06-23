@@ -59,4 +59,25 @@ export default StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
+noteCard: {
+  padding: 22,
+  borderRadius: 12,
+  shadowColor: "#000",
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.1,
+  shadowRadius: 4,
+  elevation: 3,
+},
+noteText: {
+  fontSize: 17,
+  lineHeight: 24,
+  fontWeight: '600',
+},
+input: {
+  borderRadius: 10,
+  padding: 14,
+  fontSize: 16,
+  marginBottom: 10,
+  borderWidth: 1,
+},
 });
