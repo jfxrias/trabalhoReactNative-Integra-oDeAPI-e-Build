@@ -53,33 +53,26 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
 
-            // Configura o CORS para aceitar requisições do React
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-            //autorização
-            .authorizeHttpRequests(auth -> auth
-                // Rotas públicas
-                .requestMatchers(HttpMethod.POST, "/usuarios/login").permitAll()
-                .requestMatchers(HttpMethod.POST, "/usuarios/cadastro").permitAll()
-                .requestMatchers("/configuracoes/**").authenticated()
-                .requestMatchers(
-                	    "/swagger-ui.html",
-                	    "/swagger-ui/**",
-                	    "/v3/api-docs",
-                	    "/v3/api-docs/**",
-                	    "/swagger-resources/**",
-                	    "/webjars/**"
-                	).permitAll()
-                .anyRequest().authenticated()
-            )
-
-            .addFilterBefore(jwtAuthorizationFilter,
-                UsernamePasswordAuthenticationFilter.class);
+                        .requestMatchers(HttpMethod.POST, "/usuarios/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/usuarios/cadastro").permitAll()
+                        .requestMatchers("/configuracoes/**").authenticated()
+                        .requestMatchers(
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**")
+                        .permitAll()
+                        .anyRequest().authenticated())
+                .addFilterBefore(jwtAuthorizationFilter,
+                        UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -88,11 +81,11 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-
         config.setAllowedOrigins(List.of(
-            "http://localhost:5173",   // React
-            "http://localhost:5173"    // Vite
-        ));
+                "http://localhost:5173",
+                "http://127.0.0.1:5173",
+                "http://192.168.0.107:8081",
+                "http://localhost:8081/"));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));

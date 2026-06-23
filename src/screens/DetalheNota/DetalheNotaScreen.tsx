@@ -25,7 +25,7 @@ export default function DetalheNota({ route, navigation }) {
     return (
       <View style={[styles.container, { backgroundColor: theme.bg }]}>
         <Text style={{ color: theme.text }}>{t("noteNotFound")}</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.backBtn}>
+        <TouchableOpacity onPress={() => navigation.navigate('NotasMain')} style={styles.backBtn}>
           <Text style={styles.backBtnText}>← {t("backToHome")}</Text>
         </TouchableOpacity>
       </View>
@@ -34,13 +34,12 @@ export default function DetalheNota({ route, navigation }) {
 
   const { texto, cor = '#FFD966', categoria, createdAt } = note;
 
-
-  async function copyToClipboard(text: string) {
+  async function copyToClipboard(text) {
     await Clipboard.setStringAsync(text);
     Alert.alert(t("copied"), t("copiedToClipboard"));
   }
 
-  async function shareNote(text: string) {
+  async function shareNote(text) {
     try {
       await Share.share({ message: text });
     } catch (error) {
@@ -56,8 +55,14 @@ export default function DetalheNota({ route, navigation }) {
 
       <View style={[styles.noteCard, { backgroundColor: cor }]}>
         {categoria && <Text style={styles.noteCategory}>{categoria}</Text>}
-        <Text style={[styles.noteTitle, { color: cor === '#000000' ? '#fff' : '#121212' }]}>{texto || t("noTitle")}</Text>
-        {createdAt && <Text style={[styles.noteDate, { color: cor === '#000000' ? '#ccc' : '#666' }]}>{t("addedOn")}: {createdAt}</Text>}
+        <Text style={[styles.noteTitle, { color: cor === '#000000' ? '#fff' : '#121212' }]}>
+          {texto || t("noTitle")}
+        </Text>
+        {createdAt && (
+          <Text style={[styles.noteDate, { color: cor === '#000000' ? '#ccc' : '#666' }]}>
+            {t("addedOn")}: {createdAt}
+          </Text>
+        )}
         <Text style={[styles.noteContent, { fontSize, fontFamily, color: cor === '#000000' ? '#fff' : '#333' }]}>
           {texto || t("noContent")}
         </Text>

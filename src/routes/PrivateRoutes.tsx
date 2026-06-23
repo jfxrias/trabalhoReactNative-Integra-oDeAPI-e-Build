@@ -13,7 +13,6 @@ const darkColors = { background: '#121212', card: '#1E1E1E', text: '#FFFFFF' };
 
 export default function PrivateRoutes() {
   const { userToken } = useContext(AuthContext);
-  
   const { darkMode } = useContext(ThemeContext);
 
   const customLightTheme = {
@@ -29,8 +28,10 @@ export default function PrivateRoutes() {
   return (
     <NavigationContainer theme={darkMode ? customDarkTheme : customLightTheme}>
       {userToken ? (
+      
         <StackRoutes />
       ) : (
+     
         <Stack.Navigator>
           <Stack.Screen
             name="Login"

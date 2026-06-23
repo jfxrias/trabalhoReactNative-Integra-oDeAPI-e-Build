@@ -23,7 +23,6 @@ export default function Configuracoes() {
   const [login, setLogin] = useState("");
   const { fontSize, setFontSize, fontFamily, setFontFamily } = useFont();
   const { t, i18n } = useTranslation();
-
   const { userId, user, setUser, logout } = useContext(AuthContext);
   const { darkMode, setDarkMode } = useContext(ThemeContext); 
 
